@@ -1,0 +1,168 @@
+$back: #f1f3f5 !default;
+$text1: rgba(0, 0, 0, 0.9) !default;
+$text2: rgba(0, 0, 0, 0.6) !default;
+$text3: rgba(0, 0, 0, 0.4) !default;
+$white: #fff !default;
+$white_hover: hsl(200, 12%, 98%) !default;
+$highlight: #0a59f7 !default;
+$highlight_hover: #074fdf !default;
+$divider: rgba(51, 0, 0, 0.2) !default;
+
+body {
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    width: 480px;
+    padding: 20px;
+    background-color: $back;
+}
+
+.panel {
+    display: none;
+    &.show {
+        display: block;
+    }
+}
+
+.btn {
+    outline: none;
+    position: relative;
+    display: flex;
+    line-height: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: fit-content;
+    min-height: 40px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: 0.1s;
+    font-size: 15px;
+    border: solid 1px $text3;
+    color: $text3;
+    background-color: $white;
+    cursor: not-allowed;
+    pointer-events: none;
+    &.actived {
+        border-color: $highlight;
+        color: $highlight;
+        cursor: pointer;
+        pointer-events: unset;
+        &:hover {
+            border-color: $highlight_hover;
+            color: $highlight_hover;
+            background-color: $white_hover;
+        }
+    }
+}
+
+.title-box {
+    margin-bottom: 20px;
+    .main {
+        font-size: 36px;
+        font-weight: bold;
+        margin-right: 5px;
+        letter-spacing: 0.05em;
+    }
+    .sub {
+        font-size: 18px;
+        color: $text2;
+        letter-spacing: 0.05em;
+    }
+}
+
+.content-box + div {
+    margin-top: 30px;
+}
+
+.input-box {
+    border-bottom: 2px solid $divider;
+    .input {
+        border: none;
+        outline: none;
+        font-size: 18px;
+        width: 100%;
+        line-height: 45px;
+        background-color: transparent;
+        &::placeholder {
+            color: $text3;
+            letter-spacing: 0.05em;
+        }
+    }
+}
+
+.button-box {
+    display: flex;
+    justify-content: flex-end;
+    .btn {
+        margin-left: 20px;
+    }
+}
+
+.result-area {
+    span {
+        display: block;
+        margin-top: 20px;
+    }
+}
+
+.basic-info-box {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    .basic-info {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .avatar {
+            width: 72px;
+            height: 72px;
+            border-radius: 36px;
+            margin-right: 10px;
+            object-fit: cover;
+        }
+        .info {
+            display: flex;
+            flex-direction: column;
+            .info-item {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                & + .info-item {
+                    margin-top: 10px;
+                }
+                .tag {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    height: 20px;
+                    font-size: 12px;
+                    line-height: 20px;
+                    background-color: #000;
+                    color: $white;
+                    padding: 0 5px;
+                    margin-right: 5px;
+                    border-radius: 4px;
+                }
+                .name {
+                    font-size: 15px;
+                    font-weight: bold;
+                }
+                .email {
+                    color: $text2;
+                }
+            }
+        }
+    }
+}
+.logout-btn {
+    color: $highlight;
+    border-color: $highlight;
+}
+.signature {
+    font-size: 15px;
+    color: $text2;
+}
