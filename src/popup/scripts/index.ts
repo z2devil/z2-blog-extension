@@ -1,4 +1,4 @@
-import storage, { IUser } from '@/utils/storage';
+import storage, { IUser } from '../../utils/storage';
 
 const placeholders = ['请输入邮箱', '请输入验证码'];
 const emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;

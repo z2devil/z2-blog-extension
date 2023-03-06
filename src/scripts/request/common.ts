@@ -1,5 +1,5 @@
 import axios from 'axios';
-import storage from '@/utils/storage';
+import storage from '../../utils/storage';
 
 const service = axios.create({
   baseURL: 'https://z2devil.cn/api',
