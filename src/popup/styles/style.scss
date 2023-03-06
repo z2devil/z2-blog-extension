@@ -3,9 +3,9 @@ $text1: rgba(0, 0, 0, 0.9) !default;
 $text2: rgba(0, 0, 0, 0.6) !default;
 $text3: rgba(0, 0, 0, 0.4) !default;
 $white: #fff !default;
-$white_hover: hsl(200, 12%, 98%) !default;
+$white-hover: hsl(200, 12%, 98%) !default;
 $highlight: #0a59f7 !default;
-$highlight_hover: #074fdf !default;
+$highlight-hover: #074fdf !default;
 $divider: rgba(51, 0, 0, 0.2) !default;
 
 body {
@@ -50,9 +50,9 @@ body {
         cursor: pointer;
         pointer-events: unset;
         &:hover {
-            border-color: $highlight_hover;
-            color: $highlight_hover;
-            background-color: $white_hover;
+            border-color: $highlight-hover;
+            color: $highlight-hover;
+            background-color: $white-hover;
         }
     }
 }

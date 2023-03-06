@@ -1,0 +1,39 @@
+{
+  "extends": [
+    "stylelint-config-standard",
+    "stylelint-config-standard-scss",
+    "stylelint-config-rational-order"
+  ],
+  "rules": {
+    "indentation": 2,
+    "color-hex-case": "lower",
+    "color-hex-length": "short",
+    "color-named": "never",
+    "font-weight-notation": "numeric",
+    "function-whitespace-after": "always",
+    "number-leading-zero": "never",
+    "number-no-trailing-zeros": true,
+    "number-max-precision": 3,
+    "string-quotes": "single",
+    "length-zero-no-unit": true,
+    "value-list-comma-space-after": "always",
+    "declaration-block-no-duplicate-properties": true,
+    "declaration-block-semicolon-newline-after": "always",
+    "block-opening-brace-space-before": "always",
+    "block-opening-brace-newline-after": "always",
+    "block-closing-brace-newline-before": "always",
+    "block-closing-brace-newline-after": "always",
+    "block-no-empty": true,
+    "selector-combinator-space-after": "always",
+    "selector-descendant-combinator-no-non-space": true,
+    "selector-list-comma-newline-after": "always",
+    "comment-no-empty": true,
+    "max-nesting-depth": 5,
+    "no-descending-specificity": true,
+    "no-duplicate-selectors": true,
+    "no-empty-source": true,
+    "no-eol-whitespace": true,
+    "no-extra-semicolons": true,
+    "no-missing-end-of-source-newline": true
+  }
+}
