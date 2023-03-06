@@ -27,9 +27,6 @@ module.exports = env => {
     },
     resolve: {
       modules: ['node_modules', paths.appNodeModules],
-      alias: {
-        '@': path.resolve(__dirname, '../src'),
-      },
     },
     module: {
       strictExportPresence: true,
