@@ -1,4 +1,4 @@
-const path = require('path');
+const DotenvWebpackPlugin = require('dotenv-webpack');
 const paths = require('./paths');
 
 module.exports = env => {
@@ -27,6 +27,7 @@ module.exports = env => {
     },
     resolve: {
       modules: ['node_modules', paths.appNodeModules],
+      extensions: ['.ts', '.js'],
     },
     module: {
       strictExportPresence: true,
@@ -52,8 +53,11 @@ module.exports = env => {
         },
       ].filter(Boolean),
     },
-    resolve: {
-      extensions: ['.ts', '.js'],
-    },
+    plugins: [
+      new DotenvWebpackPlugin({
+        path: '.env',
+        safe: true,
+      }),
+    ],
   };
 };

@@ -21,7 +21,10 @@ const copys = async () => {
     // 复制 popup 文件
     await copy('./src/popup', './build/popup', {
       overwrite: true,
-      filter: !/\.ts$/,
+      filter: src => {
+        // 只复制非 .ts 文件
+        return !/\.ts$/.test(src);
+      },
     }).catch(function (error) {
       console.error('Copy failed: ' + error);
       reject();

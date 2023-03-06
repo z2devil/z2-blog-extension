@@ -2,8 +2,7 @@ import axios from 'axios';
 import storage from '../../utils/storage';
 
 const service = axios.create({
-  baseURL: 'https://z2devil.cn/api',
-  // baseURL: 'http://localhost:8000/api',
+  baseURL: process.env.API_URL,
   timeout: 30000,
 });
 
