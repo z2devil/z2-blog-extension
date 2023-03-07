@@ -9,16 +9,21 @@ class Messager {
   constructor() {
     this.handlerQuene = [];
     chrome.runtime.onMessage.addListener(
-      async (request: MessageType, sender, sendResponse) => {
+      (request: MessageType, sender, sendResponse) => {
         console.log('messager request', request);
         const { code: reqCode, params } = request;
         for (const { code, callback } of this.handlerQuene) {
           if (code === reqCode) {
-            const data = await callback(params);
-            console.log('messager callback', data);
-            sendResponse(data);
+            callback(params)
+              .then(data => {
+                sendResponse(data);
+              })
+              .catch(err => {
+                sendResponse(err);
+              });
           }
         }
+        return true;
       }
     );
   }
