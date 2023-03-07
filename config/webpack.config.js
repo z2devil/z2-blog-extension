@@ -9,7 +9,7 @@ module.exports = env => {
     devtool: 'source-map',
     entry: {
       popup: {
-        import: './src/popup/scripts/index.ts',
+        import: './src/popup/views/index.tsx',
         filename: 'popup/scripts/index.js',
       },
       content: {
@@ -27,7 +27,7 @@ module.exports = env => {
     },
     resolve: {
       modules: ['node_modules', paths.appNodeModules],
-      extensions: ['.ts', '.js'],
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
     },
     module: {
       strictExportPresence: true,
@@ -39,15 +39,17 @@ module.exports = env => {
           loader: require.resolve('source-map-loader'),
         },
         {
-          oneOf: [
+          test: /\.(ts|tsx)$/,
+          include: paths.appSrc,
+          use: [
             {
-              test: /\.ts$/,
-              include: paths.appSrc,
-              use: 'ts-loader',
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env', 'solid'],
+              },
             },
             {
-              exclude: [/^$/, /\.(js|mjs|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
-              type: 'asset/resource',
+              loader: 'ts-loader',
             },
           ],
         },

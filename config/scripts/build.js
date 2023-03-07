@@ -18,19 +18,16 @@ const copys = async () => {
       reject();
     });
 
-    // 复制 popup 文件
+    // 复制 popup.html
     await copy('./src/popup', './build/popup', {
       overwrite: true,
-      filter: src => {
-        // 只复制非 .ts 文件
-        return !/\.ts$/.test(src);
-      },
+      filter: ['popup.html'],
     }).catch(function (error) {
       console.error('Copy failed: ' + error);
       reject();
     });
 
-    // 复制 manifest
+    // 复制 manifest.json
     await copy('./src', './build', {
       overwrite: true,
       filter: ['manifest.json'],

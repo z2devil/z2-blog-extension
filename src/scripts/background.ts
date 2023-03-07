@@ -1,3 +1,15 @@
+import Messager from '../utils/messager';
+import { sendCode } from './request/api';
+
+const messager = new Messager();
+
+messager.on({
+  code: 'send-code',
+  callback: async ({ email }) => {
+    return await sendCode({ email });
+  },
+});
+
 /**
  * 获取当前tab页
  */
@@ -25,27 +37,6 @@ chrome.commands.onCommand.addListener(async command => {
       isOpen = true;
     }
   );
-});
-
-/**
- * 监听关闭弹出层事件
- */
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-  console.log(request?.code);
-  const code = request?.code;
-  if (!code) return;
-  switch (code) {
-    case 'close-popup':
-      isOpen = false;
-      sendResponse({ msg: 'success' });
-      break;
-    case 'send-note':
-      console.log('发送！！');
-
-      break;
-    default:
-      break;
-  }
 });
 
 /**
@@ -101,7 +92,6 @@ const createPopupLayout = () => {
   bottomBar.appendChild(sendBtn);
   sendBtn.addEventListener('click', () => {
     const text = textarea.value;
-    console.log('textarea', text);
     if (!text) return;
     chrome.runtime.sendMessage(ID, {
       code: 'send-note',

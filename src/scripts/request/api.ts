@@ -10,13 +10,13 @@ export const sendCode = async (params: { email: string }) => {
 /**
  * 登录
  */
-export const sign = async (data: { email: string; verifyCode: string }) => {
-  return await service.post('/auth/sign', data);
+export const sign = async (body: { email: string; verifyCode: string }) => {
+  return await service.post('/auth/sign', { body });
 };
 
 /**
  * 发送动态
  */
-export const sendNote = async (data: { content: string }) => {
-  return await service.post('/tweet', data);
+export const sendNote = async (body: { content: string }) => {
+  return await service.post('/tweet', body);
 };
