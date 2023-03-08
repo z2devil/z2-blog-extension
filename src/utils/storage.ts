@@ -1,13 +1,15 @@
 export interface IUser {
+  id: number;
+  avatarPath: string;
+  email: string;
   lv: number;
   nickname: string;
-  email: string;
   signature: string;
 }
 
 export interface IStorageData {
-  user: IUser;
   token: string;
+  user: IUser;
 }
 
 const STROAGE_KEY = 'z2-token';
@@ -25,7 +27,7 @@ const storage = {
   },
   set: (data: IStorageData) => {
     return new Promise((resolve, reject) => {
-      chrome.storage.sync.set({ STROAGE_KEY: data }, () => {
+      chrome.storage.sync.set({ [STROAGE_KEY]: data }, () => {
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError);
         } else {

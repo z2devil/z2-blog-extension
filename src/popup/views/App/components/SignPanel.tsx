@@ -31,7 +31,7 @@ const SignPanel = () => {
       setInput('');
       setIsSendedCode(true);
     }
-    const res = await messager.send<{ code: number }>({
+    const res = await messager.send<{ code: number; msg: string }>({
       code: 'send-code',
       params: { email },
     });
@@ -39,6 +39,12 @@ const SignPanel = () => {
       onNotification({
         message: '发送成功',
         type: NotificationType.Success,
+        timer: 2000,
+      });
+    } else {
+      onNotification({
+        message: res.msg,
+        type: NotificationType.Error,
         timer: 2000,
       });
     }
@@ -53,20 +59,18 @@ const SignPanel = () => {
       params: { email, verifyCode: input() },
     });
     if (res.code === 200) {
-      onNotification({
-        message: '登录成功',
-        type: NotificationType.Success,
-        timer: 2000,
-      });
+      // onNotification({
+      //   message: '登录成功',
+      //   type: NotificationType.Success,
+      //   timer: 2000,
+      // });
       await storage.set(res.data);
-      setTimeout(() => {
-        location.reload();
-      }, 1000);
+      location.reload();
     }
   };
 
   return (
-    <div class='panel sign-panel show'>
+    <div class='sign-panel'>
       <div class='title-box'>
         <span class='main'>登入</span>
         <span class='sub'>登录或注册</span>

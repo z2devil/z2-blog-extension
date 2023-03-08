@@ -14,6 +14,8 @@ class Messager {
         const { code: reqCode, params } = request;
         for (const { code, callback } of this.handlerQuene) {
           if (code === reqCode) {
+            console.log('嗨嗨嗨', reqCode, this.handlerQuene);
+
             callback(params)
               .then(data => {
                 sendResponse(data);

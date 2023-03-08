@@ -17,14 +17,6 @@ body {
   background-color: $back;
 }
 
-.panel {
-  display: none;
-
-  &.show {
-    display: block;
-  }
-}
-
 .btn {
   position: relative;
   display: flex;
