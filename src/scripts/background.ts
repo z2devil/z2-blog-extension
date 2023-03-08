@@ -1,9 +1,30 @@
-import Messager from '../utils/messager';
-import { sendCode, sign } from './request/api';
+import Messager, { MessageType } from '../utils/messager';
+import { sendCode, sendNote, sign } from './request/api';
+import service from './request/common';
 
 const messager = new Messager();
 
 messager.on([
+  // TODO: 将请求合并成处理器
+  // {
+  //   code: 'request',
+  //   callback: (props: {
+  //     method: 'get' | 'post';
+  //     url: string;
+  //     options: Record<string, any>;
+  //   }) => {
+  //     const { method, url, options } = props;
+  //     return new Promise((resolve, reject) => {
+  //       service[method](url, options)
+  //         .then(res => {
+  //           resolve(res);
+  //         })
+  //         .catch(err => {
+  //           reject(err);
+  //         });
+  //     });
+  //   },
+  // },
   {
     code: 'send-code',
     callback: async ({ email }) => {
@@ -14,6 +35,12 @@ messager.on([
     code: 'sign',
     callback: async ({ email, verifyCode }) => {
       return await sign({ email, verifyCode });
+    },
+  },
+  {
+    code: 'send-note',
+    callback: async ({ content }) => {
+      return await sendNote({ content });
     },
   },
 ]);
@@ -27,32 +54,39 @@ const getCurrentTab = async () => {
   return tab;
 };
 
-// 弹出层是否已经打开
-let isOpen = false;
+let isPopupLayoutShow = false;
 
 /**
  * 监听呼出弹出层快捷键
  */
 chrome.commands.onCommand.addListener(async command => {
-  if (command !== 'write_note' || isOpen) return;
+  if (command !== 'write_note') return;
   const tab = await getCurrentTab();
-  chrome.scripting.executeScript(
-    {
-      target: { tabId: tab.id ?? 0 },
-      func: createPopupLayout,
-    },
-    () => {
-      isOpen = true;
-    }
-  );
+  chrome.scripting.executeScript({
+    target: { tabId: tab.id ?? 0 },
+    args: [isPopupLayoutShow],
+    func: createPopupLayout,
+  });
 });
 
 /**
  * 创建弹出层
  */
-const createPopupLayout = () => {
-  // 插件id
-  const ID = 'ihidlmafkicdgplnabhallfbpfohojpo';
+const createPopupLayout = (isShow: boolean) => {
+  /**
+   * 移植的Messager.send
+   */
+  function send<T = any>(message: MessageType) {
+    return new Promise<T>(resolve => {
+      chrome.runtime.sendMessage(
+        process.env.EXTENSION_ID,
+        message,
+        response => {
+          resolve(response);
+        }
+      );
+    });
+  }
   /**
    * 转化node
    */
@@ -74,11 +108,10 @@ const createPopupLayout = () => {
   shadow.appendChild(styles);
   // 遮罩
   const mask = createNode(`<div class="mask"></div>`, true);
-  mask.addEventListener('click', () => {
+  mask.addEventListener('click', event => {
+    event.preventDefault();
     body.removeChild(app);
-    chrome.runtime.sendMessage(ID, {
-      code: 'close-popup',
-    });
+    isShow = false;
   });
   shadow.appendChild(mask);
   // 弹出层
@@ -101,9 +134,13 @@ const createPopupLayout = () => {
   sendBtn.addEventListener('click', () => {
     const text = textarea.value;
     if (!text) return;
-    chrome.runtime.sendMessage(ID, {
+    send({
       code: 'send-note',
-      content: text,
+      params: { content: text },
+    }).then(res => {
+      if (res.code === 200) {
+        console.log('发表成功');
+      }
     });
   });
   // 挂载

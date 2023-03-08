@@ -18,5 +18,5 @@ export const sign = async (body: { email: string; verifyCode: string }) => {
  * 发送动态
  */
 export const sendNote = async (body: { content: string }) => {
-  return await service.post('/tweet', body);
+  return await service.post('/tweet', { body: { ...body, resources: [] } });
 };

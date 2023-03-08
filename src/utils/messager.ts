@@ -10,12 +10,9 @@ class Messager {
     this.handlerQuene = [];
     chrome.runtime.onMessage.addListener(
       (request: MessageType, sender, sendResponse) => {
-        console.log('messager request', request);
         const { code: reqCode, params } = request;
         for (const { code, callback } of this.handlerQuene) {
           if (code === reqCode) {
-            console.log('嗨嗨嗨', reqCode, this.handlerQuene);
-
             callback(params)
               .then(data => {
                 sendResponse(data);

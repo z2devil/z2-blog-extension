@@ -1,4 +1,3 @@
-import axios from 'axios';
 import storage from '../../utils/storage';
 
 const TIME_OUT = 10000;
@@ -24,29 +23,22 @@ const baseFetch = (url: string, options: Record<string, any>) => {
       }, TIME_OUT);
     }),
     new Promise((resolve, reject) => {
-      fetch(process.env.API_URL + url, options)
-        .then(async res => {
-          if (!/^(2|3)\d{2}$/.test(res.status.toString())) {
-            switch (res.status) {
-              case 401:
-                break;
-              case 403:
-                break;
-              case 404:
-                break;
-            }
-            return Promise.reject(res);
-          }
-          const data =
-            options.headers['Content-type'] === ContentType.Download
-              ? res.blob()
-              : res.json();
-          console.log('fetch data', res, await data);
-          resolve(data);
-        })
-        .catch(err => {
-          reject(err);
-        });
+      storage.get().then(storageData => {
+        if (storageData) {
+          options.headers['Authorization'] = storageData.token;
+        }
+        fetch(process.env.API_URL + url, options)
+          .then(async res => {
+            const data =
+              options.headers['Content-type'] === ContentType.Download
+                ? res.blob()
+                : res.json();
+            resolve(data);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
     }),
   ]);
 };
