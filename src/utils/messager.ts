@@ -33,14 +33,15 @@ class Messager {
         process.env.EXTENSION_ID,
         message,
         response => {
-          alert(JSON.stringify(response));
           resolve(response);
         }
       );
     });
   }
-  on(handler: HandlerType) {
-    this.handlerQuene.push(handler);
+  on(handlers: HandlerType | HandlerType[]) {
+    this.handlerQuene.push(
+      ...(Array.isArray(handlers) ? handlers : [handlers])
+    );
   }
 }
 

@@ -1,14 +1,22 @@
 import Messager from '../utils/messager';
-import { sendCode } from './request/api';
+import { sendCode, sign } from './request/api';
 
 const messager = new Messager();
 
-messager.on({
-  code: 'send-code',
-  callback: async ({ email }) => {
-    return await sendCode({ email });
+messager.on([
+  {
+    code: 'send-code',
+    callback: async ({ email }) => {
+      return await sendCode({ email });
+    },
   },
-});
+  {
+    code: 'sign',
+    callback: async ({ email, verifyCode }) => {
+      return await sign({ email, verifyCode });
+    },
+  },
+]);
 
 /**
  * 获取当前tab页

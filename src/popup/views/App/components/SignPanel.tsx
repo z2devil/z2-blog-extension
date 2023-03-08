@@ -2,6 +2,7 @@ import { createSignal } from 'solid-js';
 import classNames from 'classnames';
 import { getContext } from '../..';
 import { NotificationType } from '../hooks/useNotification';
+import storage from '../../../../utils/storage';
 
 const EMAIL_REG = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 
@@ -34,7 +35,6 @@ const SignPanel = () => {
       code: 'send-code',
       params: { email },
     });
-    // alert(JSON.stringify(res));
     if (res.code === 200) {
       onNotification({
         message: '发送成功',
@@ -47,8 +47,22 @@ const SignPanel = () => {
   /**
    * 登录
    */
-  const onSignin = () => {
-    alert(input());
+  const onSignin = async () => {
+    const res = await messager.send<{ code: number; data: any }>({
+      code: 'sign',
+      params: { email, verifyCode: input() },
+    });
+    if (res.code === 200) {
+      onNotification({
+        message: '登录成功',
+        type: NotificationType.Success,
+        timer: 2000,
+      });
+      await storage.set(res.data);
+      setTimeout(() => {
+        location.reload();
+      }, 1000);
+    }
   };
 
   return (
