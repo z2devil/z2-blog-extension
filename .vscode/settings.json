@@ -1,11 +1,5 @@
 {
-    "editor.formatOnSave": true,
-    // 使用 prettier 格式化
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
-    "eslint.format.enable": true,
-    "eslint.run": "onSave",
-    "eslint.validate": ["vue", "javascript", "javascriptreact"],
-    "editor.codeActionsOnSave": {
-        "source.fixAll.eslint": true
-    }
+  "editor.formatOnSave": true,
+  "editor.tabSize": 2,
+  "stylelint.validate": ["css", "scss"]
 }

@@ -1,66 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Document</title>
-        <link rel="stylesheet" href="./styles/style.css" />
-    </head>
-    <body>
-        <div class="panel sign-panel show">
-            <div class="title-box">
-                <span class="main">登入</span>
-                <span class="sub">登录或注册</span>
-            </div>
-            <div class="content-box">
-                <div class="input-box">
-                    <input
-                        class="input"
-                        type="text"
-                        maxlength="50"
-                        autofocus
-                        placeholder="请输入邮箱" />
-                </div>
-            </div>
-            <div class="button-box">
-                <button class="btn send-btn actived">发送验证码</button>
-                <button class="btn sign-btn">登入</button>
-            </div>
-        </div>
-        <div class="panel info-panel">
-            <div class="title-box">
-                <span class="main">用户</span>
-                <span class="sub">个人中心</span>
-            </div>
-            <div class="content-box">
-                <div class="basic-info-box">
-                    <div class="basic-info">
-                        <!-- <async-img
-                            class="avatar"
-                            :url="userInfo.avatarPath"
-                            suffix="?x-oss-process=image/resize,s_72" /> -->
-                        <div class="info">
-                            <div class="info-item">
-                                <span class="tag">{{ tag[userInfo.lv] }}</span>
-                                <span class="name"
-                                    >{{ userInfo.nickname }}</span
-                                >
-                            </div>
-                            <div class="info-item">
-                                <span class="email">{{ userInfo.email }}</span>
-                            </div>
-                        </div>
-                    </div>
-                    <button class="btn logout-btn actived">登出</button>
-                </div>
-                <div class="signature">
-                    <span>{{ userInfo.signature }}</span>
-                </div>
-            </div>
-        </div>
-        <div class="result-area"></div>
-    </body>
-    <script src="../static/lib/axios.min.js"></script>
-    <script src="./scripts/script.js"></script>
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./styles/style.css" />
+  </head>
+  <body>
+    <div id="app"></div>
+  </body>
+  <script src="./scripts/index.js"></script>
 </html>
