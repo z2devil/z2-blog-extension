@@ -6,7 +6,7 @@
   "author": "z2devil",
   "license": "MIT",
   "scripts": {
-    "sassc": "sass ./src/styles:build/styles ./src/popup/styles:build/popup/styles",
+    "sassc": "sass ./src/app/styles/style.scss:build/styles/style.css ./src/popup/styles/style.scss:build/popup/styles/style.css",
     "build": "node ./config/scripts/build.js && npm run sassc"
   },
   "devDependencies": {

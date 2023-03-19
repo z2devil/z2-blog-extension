@@ -3,7 +3,7 @@ import storage, { IStorageData, IUser } from '../../../utils/storage';
 import InfoPanel from './components/InfoPanel';
 import SignPanel from './components/SignPanel';
 
-const App = () => {
+const User = () => {
   const [storageData, setStorageData] = createSignal<IStorageData>();
 
   onMount(async () => {
@@ -22,4 +22,4 @@ const App = () => {
   );
 };
 
-export default App;
+export default User;

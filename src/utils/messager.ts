@@ -9,8 +9,8 @@ class Messager {
   constructor() {
     this.handlerQuene = [];
     chrome.runtime.onMessage.addListener(
-      (request: MessageType, sender, sendResponse) => {
-        const { code: reqCode, params } = request;
+      (message: MessageType, sender, sendResponse) => {
+        const { code: reqCode, params } = message;
         for (const { code, callback } of this.handlerQuene) {
           if (code === reqCode) {
             callback(params)
@@ -26,7 +26,7 @@ class Messager {
       }
     );
   }
-  send<T = any>(message: MessageType) {
+  static send<T = any>(message: MessageType) {
     return new Promise<T>(resolve => {
       chrome.runtime.sendMessage(
         process.env.EXTENSION_ID,

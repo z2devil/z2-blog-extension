@@ -9,16 +9,16 @@ module.exports = env => {
     devtool: 'source-map',
     entry: {
       popup: {
-        import: './src/popup/views/index.tsx',
+        import: './src/popup/main.tsx',
         filename: 'popup/scripts/index.js',
-      },
-      content: {
-        import: './src/scripts/content.ts',
-        filename: 'scripts/content.js',
       },
       background: {
         import: './src/scripts/background.ts',
         filename: 'scripts/background.js',
+      },
+      app: {
+        import: './src/app/main.tsx',
+        filename: 'scripts/app.js',
       },
     },
     output: {

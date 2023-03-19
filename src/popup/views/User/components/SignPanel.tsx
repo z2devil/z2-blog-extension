@@ -1,13 +1,14 @@
 import { createSignal } from 'solid-js';
 import classNames from 'classnames';
-import { getContext } from '../..';
-import { NotificationType } from '../hooks/useNotification';
+import { getContext } from '../../../main';
+import { NotificationType } from '../../../hooks/useNotification';
 import storage from '../../../../utils/storage';
+import Messager from '../../../../utils/messager';
 
 const EMAIL_REG = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 
 const SignPanel = () => {
-  const { messager, onNotification } = getContext();
+  const { onNotification } = getContext();
 
   let email = '';
 
@@ -31,7 +32,7 @@ const SignPanel = () => {
       setInput('');
       setIsSendedCode(true);
     }
-    const res = await messager.send<{ code: number; msg: string }>({
+    const res = await Messager.send<{ code: number; msg: string }>({
       code: 'send-code',
       params: { email },
     });
@@ -54,7 +55,7 @@ const SignPanel = () => {
    * 登录
    */
   const onSignin = async () => {
-    const res = await messager.send<{ code: number; data: any }>({
+    const res = await Messager.send<{ code: number; data: any }>({
       code: 'sign',
       params: { email, verifyCode: input() },
     });
