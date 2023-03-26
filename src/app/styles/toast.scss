@@ -1,0 +1,75 @@
+$prefix: 'z2-extension';
+
+.#{$prefix}-toast-group {
+  position: fixed;
+  z-index: 20001;
+  display: grid;
+  gap: 1vh;
+  justify-content: center;
+  justify-items: center;
+
+  /* optimizations */
+  pointer-events: none;
+  inset-block-start: 0;
+  inset-inline: 0;
+  padding-block-start: 5vh;
+}
+
+.#{$prefix}-toast {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  color: #fff;
+  font-size: 1rem;
+  font-family: system-ui, sans-serif;
+  background: hsl(0deg 0% 80%);
+  border-radius: 18px;
+  animation:
+    fade-in .3s ease, slide-in .3s ease, fade-out .3s ease var(--duration);
+  will-change: transform;
+
+  // max-inline-size: min(25ch, 90vw);
+  padding-block: .8ch;
+  padding-inline: 2ch;
+
+  &.success {
+    background-color: #63c23d;
+  }
+
+  &.warning {
+    background-color: #ffae00;
+  }
+
+  &.error {
+    background-color: #f00;
+  }
+}
+
+.#{$prefix}-toast-icon {
+  display: inline-block;
+  height: 1.5rem;
+  aspect-ratio: 1;
+  color: #fff;
+
+  path {
+    color: currentcolor;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0
+  }
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0
+  }
+}
+
+@keyframes slide-in {
+  from {
+    transform: translateY(10px)
+  }
+}
