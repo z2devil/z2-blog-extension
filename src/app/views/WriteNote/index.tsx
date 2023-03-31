@@ -1,6 +1,6 @@
 import { createSignal, useContext } from 'solid-js';
 import Messager from '../../../utils/messager';
-import { getContext } from '../../main';
+import { getContext } from '../../store';
 import { ToastType } from '../../utils/toast';
 
 interface IProps {

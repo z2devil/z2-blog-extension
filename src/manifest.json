@@ -10,7 +10,7 @@
     "128": "static/icons/icon128x128.png"
   },
   "host_permissions": ["<all_urls>"],
-  "permissions": ["tabs", "activeTab", "scripting", "storage"],
+  "permissions": ["tabs", "storage"],
   "background": {
     "service_worker": "scripts/background.js"
   },
@@ -41,7 +41,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["styles/*", "static/*"],
+      "resources": ["styles/app.css", "static/*"],
       "matches": ["<all_urls>"]
     }
   ]

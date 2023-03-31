@@ -3,7 +3,6 @@ export type HandlerType = {
   code: string;
   callback: (...args: any) => Promise<any>;
 };
-
 class Messager {
   handlerQuene: HandlerType[];
   constructor() {

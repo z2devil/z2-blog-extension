@@ -1,65 +1,64 @@
-const DotenvWebpackPlugin = require('dotenv-webpack');
-const paths = require('./paths');
+import { realpathSync } from 'fs';
+import path, { resolve } from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 
-module.exports = env => {
-  return {
-    stats: 'errors-warnings',
-    mode: 'production',
-    bail: true,
-    devtool: 'source-map',
-    entry: {
-      popup: {
-        import: './src/popup/main.tsx',
-        filename: 'popup/scripts/index.js',
-      },
-      background: {
-        import: './src/scripts/background.ts',
-        filename: 'scripts/background.js',
-      },
-      app: {
-        import: './src/app/main.tsx',
-        filename: 'scripts/app.js',
-      },
+const appDirectory = realpathSync(process.cwd());
+const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
+
+export default {
+  mode: 'production',
+  entry: {
+    popup: {
+      import: resolveApp('src/popup/popup.tsx'),
+      filename: 'popup/popup.js',
     },
-    output: {
-      path: paths.appBuild,
-      publicPath: paths.appBuild,
+    app: {
+      import: resolveApp('src/app/app.tsx'),
+      filename: 'scripts/app.js',
     },
-    resolve: {
-      modules: ['node_modules', paths.appNodeModules],
-      extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    background: {
+      import: resolveApp('src/scripts/background.ts'),
+      filename: 'scripts/background.js',
     },
-    module: {
-      strictExportPresence: true,
-      rules: [
-        {
-          enforce: 'pre',
-          exclude: /@babel(?:\/|\\{1,2})runtime/,
-          test: /\.(js|mjs|jsx|ts|tsx|css)$/,
-          loader: require.resolve('source-map-loader'),
-        },
-        {
-          test: /\.(ts|tsx)$/,
-          include: paths.appSrc,
-          use: [
-            {
-              loader: 'babel-loader',
-              options: {
-                presets: ['@babel/preset-env', 'solid'],
-              },
+  },
+  output: {
+    path: resolveApp('build'),
+    publicPath: resolveApp('build'),
+  },
+  resolve: {
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        use: [{ loader: 'babel-loader' }],
+        exclude: /node_moudles/,
+      },
+      {
+        test: /\.(scss|sass)$/,
+        use: [
+          { loader: MiniCssExtractPlugin.loader },
+          {
+            loader: 'css-loader',
+            options: {
+              modules: false,
             },
-            {
-              loader: 'ts-loader',
-            },
-          ],
-        },
-      ].filter(Boolean),
-    },
-    plugins: [
-      new DotenvWebpackPlugin({
-        path: '.env',
-        safe: true,
-      }),
+          },
+          { loader: 'sass-loader' },
+        ],
+      },
     ],
-  };
+  },
+  plugins: [
+    new HtmlWebpackPlugin({
+      filename: 'popup/popup.html',
+      template: resolveApp('src/popup/popup.html'),
+      inject: false,
+    }),
+    new MiniCssExtractPlugin({
+      filename: 'styles/[name].css',
+    }),
+  ],
 };

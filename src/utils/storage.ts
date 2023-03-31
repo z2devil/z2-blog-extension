@@ -19,6 +19,8 @@ const storage = {
       chrome.storage.sync.get(STROAGE_KEY, res => {
         if (chrome.runtime.lastError) {
           reject(chrome.runtime.lastError);
+        } else if (!res[STROAGE_KEY]) {
+          resolve(undefined);
         } else {
           resolve(res[STROAGE_KEY]);
         }

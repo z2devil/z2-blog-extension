@@ -49,7 +49,11 @@ function debounce(fn: Fn, ...args: any) {
         timer = null;
       }
       timer = setTimeout(() => {
-        fn(..._args);
+        try {
+          fn(..._args);
+        } catch (error) {
+          console.error(error);
+        }
         timer && clearTimeout(timer);
         timer = null;
       }, delay);

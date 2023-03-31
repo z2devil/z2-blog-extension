@@ -1,9 +1,9 @@
 import { createSignal } from 'solid-js';
 import classNames from 'classnames';
-import { getContext } from '../../../main';
 import { NotificationType } from '../../../hooks/useNotification';
 import storage from '../../../../utils/storage';
 import Messager from '../../../../utils/messager';
+import { getContext } from '../../../store';
 
 const EMAIL_REG = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 

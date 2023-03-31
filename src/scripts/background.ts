@@ -1,4 +1,4 @@
-import Messager, { MessageType } from '../utils/messager';
+import Messager from '../utils/messager';
 import { sendCode, sendNote, sign } from '../request/api';
 
 const messager = new Messager();
