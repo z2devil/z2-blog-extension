@@ -1,0 +1,56 @@
+@import '../../constant/styles/global';
+
+.chatgpt-layout {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: content-box;
+  width: 480px;
+  height: 240px;
+  padding: 20px;
+  background-color: $white;
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgb(0 0 0 / 16%);
+  transform: translate(-50%, -50%);
+  animation: popup-show 300ms;
+
+  .input {
+    box-sizing: border-box;
+    height: 180px;
+    padding: 10px;
+    overflow-y: auto;
+    font-size: 15px;
+    line-height: 1.5em;
+    white-space: pre-wrap;
+    vertical-align: baseline;
+    word-wrap: break-word;
+    word-break: break-word;
+    background-color: $back;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    resize: none;
+
+    &:empty::before {
+      color: $text3;
+      content: attr(placeholder);
+      pointer-events: none;
+    }
+  }
+
+  .bottom-bar {
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100%;
+  }
+}
+
+.generate-btn {
+  font-weight: 700;
+}

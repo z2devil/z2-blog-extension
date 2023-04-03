@@ -40,7 +40,7 @@ const createToast = (props: ToastProps) => {
   toast.classList.add(`${PREFIX}-toast`);
   toast.setAttribute('role', 'status');
   toast.setAttribute('aria-live', 'polite');
-  toast.style.setProperty('--_duration', props.duration || DEFAULT_DURATION);
+  toast.style.setProperty('--duration', props.duration || DEFAULT_DURATION);
 
   const icon = document.createElement('object');
 
@@ -63,19 +63,10 @@ const toastUtil = (node: ShadowRoot) => {
   const root = init(node);
 
   const flipToast = (toast: Element) => {
-    // FIRST
     const first = root.offsetHeight;
-
-    // add new child to change container size
     root.insertBefore(toast, root.firstElementChild);
-
-    // LAST
     const last = root.offsetHeight;
-
-    // INVERT
     const invert = last - first;
-
-    // PLAY
     const animation = root.animate(
       [
         { transform: `translateY(${-invert}px)` },

@@ -2,7 +2,7 @@ import storage from '../utils/storage';
 
 const TIME_OUT = 10000;
 
-const enum Method {
+export const enum Method {
   GET = 'GET',
   POST = 'POST',
   DELETE = 'DELETE',
@@ -15,7 +15,11 @@ const enum ContentType {
   Download = 'application/octet-stream',
 }
 
-const baseFetch = (url: string, options: Record<string, any>) => {
+const baseFetch = (
+  url: string,
+  options: Record<string, any>,
+  headers?: Record<string, string>
+) => {
   return Promise.race<any>([
     new Promise((_, reject) => {
       setTimeout(() => {
@@ -23,11 +27,15 @@ const baseFetch = (url: string, options: Record<string, any>) => {
       }, TIME_OUT);
     }),
     new Promise((resolve, reject) => {
-      storage.get().then(storageData => {
-        if (storageData) {
-          options.headers['Authorization'] = storageData.token;
-        }
-        fetch(process.env.API_URL + url, options)
+      storage.get('token').then(token => {
+        if (token) options.headers['Authorization'] = token;
+        headers && (options.headers = Object.assign(options.headers, headers));
+
+        const regex = /^(?:https?:\/\/)/i;
+        const fullUrl = regex.test(url) ? url : process.env.API_URL + url;
+        options.url = fullUrl;
+
+        fetch(fullUrl, options)
           .then(async res => {
             const data =
               options.headers['Content-type'] === ContentType.Download
@@ -64,7 +72,8 @@ const service = {
     options: {
       params?: Record<string, any>;
       [key: string]: any;
-    }
+    },
+    headers?: Record<string, string>
   ) => {
     const { params, ...restOptions } = options;
     if (params) {
@@ -74,26 +83,35 @@ const service = {
       );
       url += (url.search(/\?/) === -1 ? '?' : '&') + paramsArray.join('&');
     }
-    return baseFetch(url, {
-      method: Method.GET,
-      ...Object.assign(baseOptions, restOptions),
-    });
+    return baseFetch(
+      url,
+      {
+        method: Method.GET,
+        ...Object.assign(baseOptions, restOptions),
+      },
+      headers
+    );
   },
   post: (
     url: string,
     options: {
       body?: Record<string, any>;
       [key: string]: any;
-    }
+    },
+    headers?: Record<string, string>
   ) => {
     const { body, ...restOptions } = options;
-    return baseFetch(url, {
-      method: Method.POST,
-      ...Object.assign(baseOptions, {
-        body: JSON.stringify(body),
-        ...restOptions,
-      }),
-    });
+    return baseFetch(
+      url,
+      {
+        method: Method.POST,
+        ...Object.assign(baseOptions, {
+          body: JSON.stringify(body),
+          ...restOptions,
+        }),
+      },
+      headers
+    );
   },
 };
 

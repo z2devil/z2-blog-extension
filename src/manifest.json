@@ -31,6 +31,13 @@
         "mac": "Alt+W"
       },
       "description": "弹出写笔记窗口"
+    },
+    "ask_chatgpt": {
+      "suggested_key": {
+        "default": "Alt+Q",
+        "mac": "Alt+Q"
+      },
+      "description": "询问chatGPT"
     }
   },
   "content_scripts": [

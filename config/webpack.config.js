@@ -2,12 +2,17 @@ import { realpathSync } from 'fs';
 import path, { resolve } from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import DotenvWebpackPlugin from 'dotenv-webpack';
 
 const appDirectory = realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
+const mode = process.argv[2] === '--mode=development' ? 'none' : 'production';
+
+console.log('mode: ' + mode);
+
 export default {
-  mode: 'production',
+  mode: mode,
   entry: {
     popup: {
       import: resolveApp('src/popup/popup.tsx'),
@@ -60,5 +65,6 @@ export default {
     new MiniCssExtractPlugin({
       filename: 'styles/[name].css',
     }),
+    new DotenvWebpackPlugin(),
   ],
 };

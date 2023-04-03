@@ -1,66 +1,61 @@
-$prefix: "z2-extension";
+@import '../../constant/styles/global';
+
+$prefix: 'z2-extension';
 
 .#{$prefix}-toast-group {
   position: fixed;
   z-index: 20001;
-  inset-block-start: 0;
-  inset-inline: 0;
-  padding-block-start: 5vh;
-
   display: grid;
-  justify-items: center;
-  justify-content: center;
   gap: 1vh;
+  justify-content: center;
+  justify-items: center;
 
   /* optimizations */
   pointer-events: none;
+  inset-block-start: 0;
+  inset-inline: 0;
+  padding-block-start: 5vh;
 }
 
 .#{$prefix}-toast {
-  // --_duration: 3s; // js 控制
-  --_bg-lightness: 90%;
-  --_travel-distance: 0;
+  // _duration: 3s; // js 控制
   display: flex;
   flex-direction: row;
   align-items: center;
-  font-family: system-ui, sans-serif;
-  color: black;
-  background: hsl(0 0% var(--_bg-lightness)/90%);
-  // max-inline-size: min(25ch, 90vw);
-  padding-block: 0.8ch;
-  padding-inline: 2ch;
-  border-radius: 18px;
+  color: $back;
   font-size: 1rem;
+  font-family: system-ui, sans-serif;
+  background: rgba($color: #000, $alpha: 20%);
+  border-radius: 18px;
+  animation:
+    fade-in .3s ease, slide-in .3s ease, fade-out .3s ease var(--duration);
   will-change: transform;
-  animation: 
-    fade-in .3s ease,
-    slide-in .3s ease,
-    fade-out .3s ease var(--_duration);
 
-  @media (--dark) {
-    color: white;
-    --_bg-lightness: 20%;
-  }
-
-  @media (--motionOK) {
-    --_travel-distance: 5vh;
-  }
+  // max-inline-size: min(25ch, 90vw);
+  padding-block: .8ch;
+  padding-inline: 2ch;
 }
 
 @keyframes fade-in {
-  from { opacity: 0 }
+  from {
+    opacity: 0
+  }
 }
 
 @keyframes fade-out {
-  to { opacity: 0 }
+  to {
+    opacity: 0
+  }
 }
 
 @keyframes slide-in {
-  from { transform: translateY(var(--_travel-distance, 10px)) }
+  from {
+    transform: translateY(var(_travel-distance, 10px))
+  }
 }
 
 .#{$prefix}-toast-icon {
+  display: inline-block;
   height: 1.5rem;
   aspect-ratio: 1;
-  display: inline-block;
 }

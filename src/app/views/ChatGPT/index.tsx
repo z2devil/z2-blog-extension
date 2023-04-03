@@ -1,9 +1,16 @@
-import { createSignal } from 'solid-js';
-import Messager from '../../../utils/messager';
+import { createSignal, onMount } from 'solid-js';
+import { getContext } from '../../store';
+import storage from '../../../utils/storage';
+import { ask } from '../../../request/api';
+import { ToastType } from '../../utils/toast';
 
 enum DialogueOriginType {
   User = 'Uesr',
   ChatGPT = 'ChatGPT',
+}
+
+interface IProps {
+  close: () => void;
 }
 
 interface Dialogue {
@@ -11,12 +18,24 @@ interface Dialogue {
   content: string;
 }
 
-const ChatGPT = () => {
+const ChatGPT = (props: IProps) => {
+  const { showToast } = getContext();
+
   const [content, setContent] = createSignal('');
 
   const [dialogueList, setDialogueList] = createSignal<Dialogue[]>([]);
 
   const onGenerate = async () => {
+    const openaiKey = await storage.get('openaiKey');
+
+    if (openaiKey === undefined) {
+      showToast({
+        text: '请先设置OpenAI Key',
+        type: ToastType.Error,
+      });
+      return;
+    }
+
     setDialogueList(prev => {
       return prev.concat([
         {
@@ -25,22 +44,30 @@ const ChatGPT = () => {
         },
       ]);
     });
-    const res = await Messager.send({
-      code: 'chatgpt-generate',
-      params: { content: content() },
-    });
-    console.log(res);
+
+    const res = await ask({ content: content() }, openaiKey).handle();
 
     setContent('');
     setDialogueList(list => {
       return list.concat([
         {
           origin: DialogueOriginType.ChatGPT,
-          content: res.text,
+          content: res.choices[0].message.content,
         },
       ]);
     });
   };
+
+  onMount(() => {
+    storage
+      .get('openaiKey')
+      .then(data => {
+        console.log(data);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  });
 
   return (
     <>
@@ -56,11 +83,12 @@ const ChatGPT = () => {
           })}
         </div>
         <input
+          class='input'
           type='text'
           value={content()}
           onInput={e => setContent(e.currentTarget.value)}
         />
-        <button class='generate-btn' onClick={onGenerate}>
+        <button class='btn generate-btn actived' onClick={onGenerate}>
           生成
         </button>
       </div>

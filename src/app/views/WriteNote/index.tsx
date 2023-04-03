@@ -2,15 +2,16 @@ import { createSignal, useContext } from 'solid-js';
 import Messager from '../../../utils/messager';
 import { getContext } from '../../store';
 import { ToastType } from '../../utils/toast';
+import { sendNote } from '../../../request/api';
 
 interface IProps {
   close: () => void;
 }
 
 const WriteNote = (props: IProps) => {
-  const [text, setText] = createSignal('');
-
   const { showToast } = getContext();
+
+  const [text, setText] = createSignal('');
 
   const onSend = async () => {
     if (text().length === 0) {
@@ -20,15 +21,19 @@ const WriteNote = (props: IProps) => {
       });
       return;
     }
-    const res = await Messager.send({
-      code: 'send-note',
-      params: { content: text() },
-    });
-    if (res.code === 200) {
+
+    const { code, msg } = await sendNote({ content: text() }).handle();
+
+    if (code === 0) {
       showToast({
         text: '发表成功',
       });
       props.close();
+    } else {
+      showToast({
+        type: ToastType.Error,
+        text: msg,
+      });
     }
   };
   return (

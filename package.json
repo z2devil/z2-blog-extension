@@ -5,9 +5,9 @@
   "main": "index.js",
   "author": "z2devil",
   "license": "MIT",
-  "type": "module",
   "scripts": {
-    "build": "node ./config/build.js"
+    "build:dev": "node ./config/build.js --mode=development",
+    "build:prod": "node ./config/build.js --mode=production"
   },
   "devDependencies": {
     "@babel/core": "^7.21.3",
@@ -56,5 +56,10 @@
   "dependencies": {
     "classnames": "^2.3.2",
     "solid-js": "^1.6.11"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-customizable"
+    }
   }
 }

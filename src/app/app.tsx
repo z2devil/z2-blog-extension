@@ -1,26 +1,34 @@
-import { createSignal, onMount } from 'solid-js';
+import { Match, Switch, createSignal, onMount } from 'solid-js';
 import { render } from 'solid-js/web';
 import Messager from '../utils/messager';
 // import ChatGPT from './views/ChatGPT';
 import WriteNote from './views/WriteNote';
 import toastUtil, { ToastProps } from './utils/toast';
 import { Context } from './store';
+import ChatGPT from './views/ChatGPT';
 import './styles/style.scss';
 
 const messager = new Messager();
 
 const Main = () => {
-  const [show, setShow] = createSignal(false);
+  const [show, setShow] = createSignal<null | 'note' | 'chat'>(null);
 
   const onClose = () => {
-    setShow(false);
+    setShow(null);
   };
 
   onMount(() => {
     messager.on({
-      code: 'toggle-popup',
+      code: 'write_note',
       callback: () => {
-        setShow(prev => !prev);
+        setShow(prev => (prev ? null : 'note'));
+        return Promise.resolve();
+      },
+    });
+    messager.on({
+      code: 'ask_chatgpt',
+      callback: () => {
+        setShow(prev => (prev ? null : 'chat'));
         return Promise.resolve();
       },
     });
@@ -32,8 +40,14 @@ const Main = () => {
       {show() ? (
         <>
           <div class='mask' onClick={onClose}></div>
-          {/* <ChatGPT /> */}
-          <WriteNote close={onClose} />
+          <Switch>
+            <Match when={show() === 'chat'}>
+              <ChatGPT close={onClose} />
+            </Match>
+            <Match when={show() === 'note'}>
+              <WriteNote close={onClose} />
+            </Match>
+          </Switch>
         </>
       ) : null}
     </>

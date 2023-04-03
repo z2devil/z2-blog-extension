@@ -1,9 +1,10 @@
 import { createSignal } from 'solid-js';
 import classNames from 'classnames';
 import { NotificationType } from '../../../hooks/useNotification';
-import storage from '../../../../utils/storage';
+import storage, { IUser } from '../../../../utils/storage';
 import Messager from '../../../../utils/messager';
 import { getContext } from '../../../store';
+import { sendCode, sign } from '../../../../request/api';
 
 const EMAIL_REG = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 
@@ -32,11 +33,8 @@ const SignPanel = () => {
       setInput('');
       setIsSendedCode(true);
     }
-    const res = await Messager.send<{ code: number; msg: string }>({
-      code: 'send-code',
-      params: { email },
-    });
-    if (res.code === 200) {
+    const { code, msg } = await sendCode({ email }).handle();
+    if (code === 0) {
       onNotification({
         message: '发送成功',
         type: NotificationType.Success,
@@ -44,7 +42,7 @@ const SignPanel = () => {
       });
     } else {
       onNotification({
-        message: res.msg,
+        message: msg,
         type: NotificationType.Error,
         timer: 2000,
       });
@@ -55,17 +53,13 @@ const SignPanel = () => {
    * 登录
    */
   const onSignin = async () => {
-    const res = await Messager.send<{ code: number; data: any }>({
-      code: 'sign',
-      params: { email, verifyCode: input() },
-    });
-    if (res.code === 200) {
-      // onNotification({
-      //   message: '登录成功',
-      //   type: NotificationType.Success,
-      //   timer: 2000,
-      // });
-      await storage.set(res.data);
+    const { data, code, msg } = await sign({
+      email,
+      verifyCode: input(),
+    }).handle();
+    if (code === 0) {
+      await storage.set('token', data.token);
+      await storage.set('user', data.user);
       location.reload();
     }
   };
