@@ -1,8 +1,10 @@
 import { createSignal, useContext } from 'solid-js';
-import Messager from '../../../utils/messager';
 import { getContext } from '../../store';
 import { ToastType } from '../../utils/toast';
 import { sendNote } from '../../../request/api';
+import style from './style.module.scss';
+import buttonStyle from '@/constant/styles/button.module.scss';
+import classNames from 'classnames';
 
 interface IProps {
   close: () => void;
@@ -37,22 +39,22 @@ const WriteNote = (props: IProps) => {
     }
   };
   return (
-    <>
-      <div class='popup-layout'>
-        <textarea
-          class='textarea'
-          placeholder='写下你的灵感'
-          spellcheck={false}
-          value={text()}
-          onInput={e => setText(e.currentTarget.value)}
-        />
-        <div class='bottom-bar'>
-          <button class='btn send-btn actived' onClick={onSend}>
-            发表
-          </button>
-        </div>
+    <div class={style.popupLayout}>
+      <textarea
+        class={style.textarea}
+        placeholder='写下你的灵感'
+        spellcheck={false}
+        value={text()}
+        onInput={e => setText(e.currentTarget.value)}
+      />
+      <div class={style.bottomBar}>
+        <button
+          class={classNames(buttonStyle.btn, style.sendBtn)}
+          onClick={onSend}>
+          发表
+        </button>
       </div>
-    </>
+    </div>
   );
 };
 

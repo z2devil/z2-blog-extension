@@ -1,10 +1,12 @@
 import { createSignal } from 'solid-js';
 import classNames from 'classnames';
-import { NotificationType } from '../../../hooks/useNotification';
-import storage, { IUser } from '../../../../utils/storage';
-import Messager from '../../../../utils/messager';
-import { getContext } from '../../../store';
-import { sendCode, sign } from '../../../../request/api';
+import { NotificationType } from '@/popup/hooks/useNotification';
+import storage, { IUser } from '../../../../../utils/storage';
+import { getContext } from '../../../../store';
+import { sendCode, sign } from '../../../../../request/api';
+import style from './style.module.scss';
+import buttonStyle from '@/constant/styles/button.module.scss';
+import Panel from '../Panel';
 
 const EMAIL_REG = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
 
@@ -34,7 +36,7 @@ const SignPanel = () => {
       setIsSendedCode(true);
     }
     const { code, msg } = await sendCode({ email }).handle();
-    if (code === 0) {
+    if (code === 200) {
       onNotification({
         message: '发送成功',
         type: NotificationType.Success,
@@ -57,23 +59,27 @@ const SignPanel = () => {
       email,
       verifyCode: input(),
     }).handle();
-    if (code === 0) {
-      await storage.set('token', data.token);
-      await storage.set('user', data.user);
+    if (code === 200) {
+      try {
+        await storage.set('token', data.token);
+        await storage.set('user', data.user);
+      } catch (error) {
+        onNotification({
+          message: JSON.stringify(error),
+          type: NotificationType.Error,
+          timer: 2000,
+        });
+      }
       location.reload();
     }
   };
 
   return (
-    <div class='sign-panel'>
-      <div class='title-box'>
-        <span class='main'>登入</span>
-        <span class='sub'>登录或注册</span>
-      </div>
-      <div class='content-box'>
-        <div class='input-box'>
+    <Panel title='登入' subTitle='登录或注册'>
+      <>
+        <div class={style.inputBox}>
           <input
-            class='input'
+            class={style.input}
             type='text'
             maxlength='50'
             autofocus
@@ -82,18 +88,23 @@ const SignPanel = () => {
             onInput={e => setInput(e.currentTarget.value)}
           />
         </div>
-      </div>
-      <div class='button-box'>
-        <button class='btn send-btn actived' onClick={onSendCode}>
-          {isSendedCode() ? '重新发送验证码' : '发送验证码'}
-        </button>
-        <button
-          class={classNames('btn sign-btn', isSendedCode() ? 'actived' : '')}
-          onClick={onSignin}>
-          登录 / 注册
-        </button>
-      </div>
-    </div>
+        <div class={style.buttonBox}>
+          <button
+            class={classNames(buttonStyle.btn, style.sendBtn)}
+            onClick={onSendCode}>
+            {isSendedCode() ? '重新发送验证码' : '发送验证码'}
+          </button>
+          <button
+            class={classNames(
+              buttonStyle.btn,
+              !isSendedCode() ? buttonStyle.disabled : ''
+            )}
+            onClick={onSignin}>
+            登录 / 注册
+          </button>
+        </div>
+      </>
+    </Panel>
   );
 };
 

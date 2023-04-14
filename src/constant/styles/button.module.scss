@@ -1,0 +1,41 @@
+@import 'src/constant/styles/val.module';
+
+.btn {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  min-height: 40px;
+  padding: 10px 20px;
+  overflow: hidden;
+  color: $highlight;
+  font-size: 15px;
+  line-height: 1;
+  background-color: $white;
+  border: solid 1px $highlight;
+  border-radius: 8px;
+  outline: none;
+  cursor: pointer;
+  transition: .1s;
+
+  &.samll {
+    min-height: 30px;
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  &:hover {
+    color: $highlight-hover;
+    background-color: $white-hover;
+    border-color: $highlight-hover;
+  }
+
+  &.disabled {
+    color: $text3;
+    border-color: $text3;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}

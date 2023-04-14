@@ -52,7 +52,7 @@ class Messager {
           if (response === undefined) {
             reject(new Error('Response Error'));
           } else {
-            resolve(response as R);
+            resolve(response);
           }
         }
       );

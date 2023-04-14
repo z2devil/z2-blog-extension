@@ -1,0 +1,31 @@
+@import 'src/constant/styles/val.module';
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 480px;
+  padding: 20px;
+  background-color: $back;
+}
+
+.title-box {
+  margin-bottom: 20px;
+
+  .title-main {
+    margin-right: 5px;
+    font-weight: 700;
+    font-size: 36px;
+    letter-spacing: .05em;
+  }
+
+  .title-sub {
+    color: $text2;
+    font-size: 18px;
+    letter-spacing: .05em;
+  }
+}
+
+.content-box + * {
+  margin-top: 30px;
+}

@@ -21,5 +21,10 @@
     "ecmaVersion": "latest"
   },
   "plugins": ["@typescript-eslint", "prettier"],
-  "rules": { "no-console": "off", "no-useless-catch": "off" }
+  "rules": { "no-console": "off", "no-useless-catch": "off" },
+  "settings": {
+    "import/resolver": {
+      "alias": [["@", "./src"]]
+    }
+  }
 }

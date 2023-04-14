@@ -1,5 +1,6 @@
 import classNames from 'classnames';
 import { createSignal, createEffect } from 'solid-js';
+import style from './style.module.scss';
 
 export enum NotificationType {
   Normal = 'normal',
@@ -37,7 +38,7 @@ const NotificationHandler = (props: IProps) => {
   return (
     <>
       {options().timer > 0 ? (
-        <div class={classNames('notification', options().type)}>
+        <div class={classNames(style.notification, style[options().type])}>
           <span>{options().message}</span>
         </div>
       ) : null}

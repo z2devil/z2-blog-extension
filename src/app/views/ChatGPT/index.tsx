@@ -3,58 +3,25 @@ import { getContext } from '../../store';
 import storage from '../../../utils/storage';
 import { ask } from '../../../request/api';
 import { ToastType } from '../../utils/toast';
-
-enum DialogueOriginType {
-  User = 'Uesr',
-  ChatGPT = 'ChatGPT',
-}
+import style from './style.module.scss';
+import classNames from 'classnames';
+import ChatRecords, { Dialogue } from './components/ChatRecords';
+import ChatInput from './components/ChatInput';
 
 interface IProps {
   close: () => void;
 }
 
-interface Dialogue {
-  origin: DialogueOriginType;
-  content: string;
-}
-
 const ChatGPT = (props: IProps) => {
   const { showToast } = getContext();
 
-  const [content, setContent] = createSignal('');
-
   const [dialogueList, setDialogueList] = createSignal<Dialogue[]>([]);
 
-  const onGenerate = async () => {
-    const openaiKey = await storage.get('openaiKey');
+  const handleChangeDialueList = (dialogue: Dialogue) => {
+    console.log('handleChangeDialueList', dialogue);
 
-    if (openaiKey === undefined) {
-      showToast({
-        text: '请先设置OpenAI Key',
-        type: ToastType.Error,
-      });
-      return;
-    }
-
-    setDialogueList(prev => {
-      return prev.concat([
-        {
-          origin: DialogueOriginType.User,
-          content: content(),
-        },
-      ]);
-    });
-
-    const res = await ask({ content: content() }, openaiKey).handle();
-
-    setContent('');
     setDialogueList(list => {
-      return list.concat([
-        {
-          origin: DialogueOriginType.ChatGPT,
-          content: res.choices[0].message.content,
-        },
-      ]);
+      return list.concat([dialogue]);
     });
   };
 
@@ -62,7 +29,7 @@ const ChatGPT = (props: IProps) => {
     storage
       .get('openaiKey')
       .then(data => {
-        console.log(data);
+        console.log('openaiKey', data);
       })
       .catch(err => {
         console.log(err);
@@ -70,29 +37,13 @@ const ChatGPT = (props: IProps) => {
   });
 
   return (
-    <>
-      <div class='chatgpt-layout'>
-        <div class='dialogue-container'>
-          {dialogueList().map(dialogue => {
-            return (
-              <div class='dialogue-item'>
-                <div class='dialogue-origin'>{dialogue.origin}</div>
-                <div class='dialogue-content'>{dialogue.content}</div>
-              </div>
-            );
-          })}
-        </div>
-        <input
-          class='input'
-          type='text'
-          value={content()}
-          onInput={e => setContent(e.currentTarget.value)}
-        />
-        <button class='btn generate-btn actived' onClick={onGenerate}>
-          生成
-        </button>
-      </div>
-    </>
+    <div class={style.chatgptLayout}>
+      <ChatRecords records={dialogueList()} />
+      <ChatInput
+        onAsk={handleChangeDialueList}
+        onGenerate={handleChangeDialueList}
+      />
+    </div>
   );
 };
 

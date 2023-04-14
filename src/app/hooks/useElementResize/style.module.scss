@@ -1,0 +1,17 @@
+.resize-handler {
+  position: absolute;
+  top: 2px;
+  left: 50%;
+  width: 100px;
+  height: 4px;
+  background-color: rgb(0 0 0 / 20%);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  cursor: ns-resize;
+  transition: background-color .1s;
+
+  &:hover,
+  &.active {
+    background-color: rgb(0 0 0 / 40%);
+  }
+}

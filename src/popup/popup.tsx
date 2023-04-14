@@ -2,7 +2,7 @@ import { render } from 'solid-js/web';
 import User from './views/User';
 import useNotification from './hooks/useNotification';
 import { Context, ContextType } from './store';
-import './styles/style.scss';
+import './base.module.scss';
 
 const Main = () => {
   const [onNotification, NotificationHandler] = useNotification();

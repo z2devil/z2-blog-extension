@@ -1,0 +1,24 @@
+@import 'src/constant/styles/val.module';
+
+.chatgpt-layout {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 10001;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: content-box;
+  width: 720px;
+  border-radius: 10px;
+  transform: translate(-50%, -50%);
+  animation: popup-show 300ms;
+
+  .bottom-bar {
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    width: 100%;
+  }
+}

@@ -54,7 +54,7 @@ export const sendCode = (params: { email: string }) => {
   return Messager.send<ResponseData>({
     code: 'request',
     params: {
-      url: '/auth/send-code',
+      url: '/auth/verify-code',
       method: 'get',
       params,
     },
@@ -95,7 +95,7 @@ export const sendNote = (body: { content: string }) => {
 /**
  * 问 chatGPT
  */
-interface ChatCompletion {
+export interface ChatCompletion {
   id: string;
   object: 'chat.completion';
   created: number;
@@ -116,6 +116,8 @@ interface ChatCompletion {
 }
 
 export const ask = (body: { content: string }, openaiKey: string) => {
+  console.log('ask', body, openaiKey);
+
   return Messager.send<ChatCompletion>({
     code: 'request',
     params: {
@@ -132,7 +134,7 @@ export const ask = (body: { content: string }, openaiKey: string) => {
         temperature: 1,
         top_p: 1,
         stream: false,
-        stop: '\n',
+        // stop: '\n',
         // max_tokens: 'inf',
       },
       headers: {

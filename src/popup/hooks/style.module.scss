@@ -1,0 +1,31 @@
+@import 'src/constant/styles/val.module';
+
+.notification {
+  position: fixed;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 4px;
+  color: #fff;
+  font-size: 14px;
+
+  &.normal {
+    background-color: #9ac9ff;
+  }
+
+  &.success {
+    background-color: #7ccc5c;
+  }
+
+  &.warning {
+    background-color: #f7bc3d;
+  }
+
+  &.error {
+    background-color: #ff5b5b;
+  }
+
+}

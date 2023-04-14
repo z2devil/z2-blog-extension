@@ -1,5 +1,5 @@
 import { realpathSync } from 'fs';
-import path, { resolve } from 'path';
+import path from 'path';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import DotenvWebpackPlugin from 'dotenv-webpack';
@@ -8,8 +8,6 @@ const appDirectory = realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
 const mode = process.argv[2] === '--mode=development' ? 'none' : 'production';
-
-console.log('mode: ' + mode);
 
 export default {
   mode: mode,
@@ -33,6 +31,9 @@ export default {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx'],
+    alias: {
+      '@': resolveApp('src'),
+    },
   },
   module: {
     rules: [
@@ -48,10 +49,15 @@ export default {
           {
             loader: 'css-loader',
             options: {
-              modules: false,
+              importLoaders: 1,
+              modules: {
+                exportLocalsConvention: 'camelCase',
+              },
             },
           },
-          { loader: 'sass-loader' },
+          {
+            loader: 'sass-loader',
+          },
         ],
       },
     ],

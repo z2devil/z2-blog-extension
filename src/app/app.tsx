@@ -6,7 +6,7 @@ import WriteNote from './views/WriteNote';
 import toastUtil, { ToastProps } from './utils/toast';
 import { Context } from './store';
 import ChatGPT from './views/ChatGPT';
-import './styles/style.scss';
+import style from './style.module.scss';
 
 const messager = new Messager();
 
@@ -39,7 +39,7 @@ const Main = () => {
     <>
       {show() ? (
         <>
-          <div class='mask' onClick={onClose}></div>
+          <div class={style.mask} onClick={onClose}></div>
           <Switch>
             <Match when={show() === 'chat'}>
               <ChatGPT close={onClose} />

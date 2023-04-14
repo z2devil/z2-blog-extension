@@ -1,0 +1,109 @@
+@import 'src/constant/styles/val.module';
+
+.basic-info-box {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+
+  .info-left {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    .avatar {
+      width: 72px;
+      height: 72px;
+      margin-right: 10px;
+      object-fit: cover;
+      border-radius: 36px;
+    }
+
+    .info {
+      display: flex;
+      flex-direction: column;
+
+      .info-item {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
+        & + .info-item {
+          margin-top: 10px;
+        }
+
+        .tag {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          height: 20px;
+          margin-right: 5px;
+          padding: 0 5px;
+          color: $white;
+          font-size: 12px;
+          line-height: 20px;
+          background-color: #000;
+          border-radius: 4px;
+        }
+
+        .nickname {
+          font-weight: 700;
+          font-size: 15px;
+        }
+
+        .email {
+          color: $text2;
+        }
+      }
+    }
+  }
+
+  .logout-btn {
+    color: $highlight;
+    border-color: $highlight;
+  }
+}
+
+.signature {
+  margin-bottom: 20px;
+  color: $text2;
+  font-size: 15px;
+}
+
+.other-info {
+  display: flex;
+  flex-direction: column;
+
+  .label {
+    margin-bottom: 10px;
+    color: $text2;
+    font-weight: 700;
+    font-size: 15px;
+  }
+
+  .content {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+
+    .input {
+      flex: 1;
+      height: 30px;
+      padding: 0 10px;
+      color: $text1;
+      font-size: 15px;
+      line-height: 30px;
+      border: 1px solid $divider;
+      border-radius: 4px;
+      outline: none;
+    }
+
+    .value {
+      flex: 1;
+      color: $text1;
+      font-size: 15px;
+      line-height: 30px;
+    }
+  }
+}

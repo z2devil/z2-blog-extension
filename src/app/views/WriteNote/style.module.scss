@@ -1,6 +1,6 @@
-@import '../../constant/styles/global';
+@import 'src/constant/styles/val.module';
 
-.chatgpt-layout {
+.popup-layout {
   position: fixed;
   top: 50%;
   left: 50%;
@@ -18,7 +18,7 @@
   transform: translate(-50%, -50%);
   animation: popup-show 300ms;
 
-  .input {
+  .textarea {
     box-sizing: border-box;
     height: 180px;
     padding: 10px;
@@ -51,6 +51,19 @@
   }
 }
 
-.generate-btn {
+.send-btn {
   font-weight: 700;
 }
+
+@keyframes popup-show {
+  0% {
+    transform: translate(-50%, calc(-50% + 50px));
+    opacity: 0;
+  }
+
+  100% {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+  }
+}
+

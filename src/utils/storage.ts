@@ -71,15 +71,19 @@ const storage = {
   },
   set: <Key extends keyof IStorageData>(key: Key, data: IStorageData[Key]) => {
     return new Promise(async (resolve, reject) => {
-      const storageData = await getStorageData();
-
-      if (storageData === undefined) {
-        const newData: IStorageData = {};
-        newData[key] = data;
-        setStorageData(newData);
-      } else {
-        storageData[key] = data;
-        setStorageData(storageData);
+      try {
+        const storageData = await getStorageData();
+        if (storageData === undefined) {
+          const newData: IStorageData = {};
+          newData[key] = data;
+          await setStorageData(newData);
+        } else {
+          storageData[key] = data;
+          await setStorageData(storageData);
+        }
+        resolve(null);
+      } catch (error) {
+        reject(error);
       }
     });
   },
