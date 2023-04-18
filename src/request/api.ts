@@ -1,5 +1,5 @@
 import Messager from '../utils/messager';
-import storage, { IUser } from '../utils/storage';
+import { IUser } from '../utils/storage';
 import service from './common';
 
 interface RequestParams {
@@ -87,58 +87,6 @@ export const sendNote = (body: { content: string }) => {
       body: {
         ...body,
         resources: [],
-      },
-    },
-  });
-};
-
-/**
- * 问 chatGPT
- */
-export interface ChatCompletion {
-  id: string;
-  object: 'chat.completion';
-  created: number;
-  model: string;
-  usage: {
-    prompt_tokens: number;
-    completion_tokens: number;
-    total_tokens: number;
-  };
-  choices: {
-    message: {
-      role: string;
-      content: string;
-    };
-    finish_reason: string;
-    index: number;
-  }[];
-}
-
-export const ask = (body: { content: string }, openaiKey: string) => {
-  console.log('ask', body, openaiKey);
-
-  return Messager.send<ChatCompletion>({
-    code: 'request',
-    params: {
-      url: 'https://openai-proxy-bay.vercel.app/v1/chat/completions',
-      method: 'post',
-      body: {
-        model: 'gpt-3.5-turbo',
-        messages: [
-          {
-            role: 'user',
-            content: body.content,
-          },
-        ],
-        temperature: 1,
-        top_p: 1,
-        stream: false,
-        // stop: '\n',
-        // max_tokens: 'inf',
-      },
-      headers: {
-        Authorization: `Bearer ${openaiKey}`,
       },
     },
   });

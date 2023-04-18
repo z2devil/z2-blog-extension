@@ -16,11 +16,21 @@ async function main() {
     spinner.start('拷贝静态文件...');
     await copys();
     spinner.start('打包中...');
-    const stats = await build(config);
-    console.log(stats);
+    const {
+      compilation: { errors, warnings },
+    } = await build(config);
+    if (errors.length) {
+      spinner.fail('打包失败');
+      console.error(errors);
+      return process.exit(1);
+    }
+    if (warnings.length) {
+      console.warn(warnings);
+    }
   } catch (error) {
-    spinner.fail('打包失败：' + JSON.stringify(error));
-    return process.exit(0);
+    spinner.fail('打包失败');
+    console.error(error);
+    return process.exit(1);
   }
   spinner.succeed('打包成功！');
   process.exit(0);

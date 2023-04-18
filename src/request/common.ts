@@ -51,6 +51,30 @@ const baseFetch = (
   ]);
 };
 
+const streamFetch = (
+  url: string,
+  options: Record<string, any>,
+  headers?: Record<string, string>
+) => {
+  return new Promise<Response>((resolve, reject) => {
+    storage.get('token').then(async token => {
+      if (token) options.headers['Authorization'] = token;
+      headers && (options.headers = Object.assign(options.headers, headers));
+
+      const regex = /^(?:https?:\/\/)/i;
+      const fullUrl = regex.test(url) ? url : process.env.API_URL + url;
+      options.url = fullUrl;
+
+      try {
+        const response = await fetch(fullUrl, options);
+        resolve(response);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  });
+};
+
 const baseOptions = {
   headers: {
     'Content-type': ContentType.Json,
@@ -67,6 +91,25 @@ const baseOptions = {
 };
 
 const service = {
+  stream: (
+    url: string,
+    options: {
+      body?: Record<string, any>;
+      [key: string]: any;
+    },
+    headers?: Record<string, string>
+  ) => {
+    const { body, ...restOptions } = options;
+    return streamFetch(
+      url,
+      {
+        method: Method.POST,
+        body: JSON.stringify(body),
+        ...Object.assign(baseOptions, restOptions),
+      },
+      headers
+    );
+  },
   get: (
     url: string,
     options: {

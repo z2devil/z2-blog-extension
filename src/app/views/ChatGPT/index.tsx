@@ -1,28 +1,33 @@
-import { createSignal, onMount } from 'solid-js';
-import { getContext } from '../../store';
+import { onMount } from 'solid-js';
+import { createStore, produce } from 'solid-js/store';
 import storage from '../../../utils/storage';
-import { ask } from '../../../request/api';
-import { ToastType } from '../../utils/toast';
 import style from './style.module.scss';
-import classNames from 'classnames';
 import ChatRecords, { Dialogue } from './components/ChatRecords';
 import ChatInput from './components/ChatInput';
 
-interface IProps {
-  close: () => void;
-}
+const ChatGPT = () => {
+  const [dialogueList, setDialogueList] = createStore<Dialogue[]>([]);
 
-const ChatGPT = (props: IProps) => {
-  const { showToast } = getContext();
-
-  const [dialogueList, setDialogueList] = createSignal<Dialogue[]>([]);
-
-  const handleChangeDialueList = (dialogue: Dialogue) => {
-    console.log('handleChangeDialueList', dialogue);
-
+  const onAsk = (dialogue: Omit<Dialogue, 'id'>) => {
     setDialogueList(list => {
-      return list.concat([dialogue]);
+      return list.concat([{ id: dialogueList.length + '', ...dialogue }]);
     });
+  };
+
+  const onGenerate = (dialogue: Dialogue) => {
+    const existIndex = dialogueList.findIndex(item => item.id === dialogue.id);
+
+    if (~existIndex) {
+      setDialogueList(
+        produce(dialogueList => {
+          dialogueList[existIndex].content += dialogue.content;
+        })
+      );
+    } else {
+      return setDialogueList(list => {
+        return list.concat([dialogue]);
+      });
+    }
   };
 
   onMount(() => {
@@ -38,11 +43,8 @@ const ChatGPT = (props: IProps) => {
 
   return (
     <div class={style.chatgptLayout}>
-      <ChatRecords records={dialogueList()} />
-      <ChatInput
-        onAsk={handleChangeDialueList}
-        onGenerate={handleChangeDialueList}
-      />
+      <ChatRecords records={dialogueList} />
+      <ChatInput onAsk={onAsk} onGenerate={onGenerate} />
     </div>
   );
 };

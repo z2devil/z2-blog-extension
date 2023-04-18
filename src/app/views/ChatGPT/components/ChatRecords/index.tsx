@@ -1,16 +1,12 @@
 import { For, Match, Show, Switch, createSignal, onMount } from 'solid-js';
-import { ChatCompletion } from '../../../../../request/api';
 import style from './style.module.scss';
 import classNames from 'classnames';
 import storage, { IUser } from '@/utils/storage';
 import IChatGPT from '@/constant/icons/IChatGPT';
-
-export enum DialogueOriginType {
-  User = 'Uesr',
-  ChatGPT = 'ChatGPT',
-}
+import { ChatCompletion, DialogueOriginType } from '@/request/chatgpt';
 
 export interface Dialogue {
+  id: string;
   origin: DialogueOriginType;
   content: string;
   metaData: ChatCompletion | null;
@@ -32,7 +28,7 @@ const ChatRecords = (props: IProps) => {
     <div class={style.chatRecords}>
       <Show when={userData()} fallback={<div>请登录...</div>}>
         <For each={props.records} fallback={<div>Loading...</div>}>
-          {(record, index) => (
+          {record => (
             <div
               class={classNames(
                 style.dialogueItem,

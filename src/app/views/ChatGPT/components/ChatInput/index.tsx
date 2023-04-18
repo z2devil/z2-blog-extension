@@ -1,29 +1,30 @@
-import { JSX, createEffect, createSignal, onMount } from 'solid-js';
+import { JSX, createEffect, createSignal } from 'solid-js';
 import style from './style.module.scss';
 import textareaStyle from '@/constant/styles/textarea.module.scss';
 import { getContext } from '@/app/store';
-import { ChatCompletion, ask } from '@/request/api';
-import { Dialogue, DialogueOriginType } from '../ChatRecords';
+import { Dialogue } from '../ChatRecords';
 import classNames from 'classnames';
 import IArrowUp from '@/constant/icons/IArrowUp';
 import { ToastType } from '@/app/utils/toast';
 import useElementResize from '@/app/hooks/useElementResize';
 import storage from '@/utils/storage';
+import { DialogueOriginType, ask } from '@/request/chatgpt';
 
 interface IProps {
-  onAsk: (dialogue: Dialogue) => void;
+  onAsk: (dialogue: Omit<Dialogue, 'id'>) => void;
   onGenerate: (dialogue: Dialogue) => void;
 }
 
 // 更新textarea的高度
-const updateTextareaHeight = (textarea: HTMLTextAreaElement) => {
+const updateTextareaHeight = (textarea: HTMLTextAreaElement | undefined) => {
+  if (!textarea) return;
   textarea.style.height = 'auto';
   const nextHeight = textarea.scrollHeight;
   textarea.style.height = nextHeight + 'px';
 };
 
 const ChatInput = (props: IProps) => {
-  let textareaRef: HTMLTextAreaElement | undefined = undefined;
+  const textareaRef: HTMLTextAreaElement | undefined = undefined;
   const [resizeHandler, setResizeHandler] = createSignal<JSX.Element | null>(
     null
   );
@@ -74,7 +75,7 @@ const ChatInput = (props: IProps) => {
       return;
     }
 
-    updateTextareaHeight(textareaRef!);
+    updateTextareaHeight(textareaRef);
     setInput('');
 
     props.onAsk({
@@ -83,15 +84,19 @@ const ChatInput = (props: IProps) => {
       metaData: null,
     });
 
-    const res = await ask({ content: inputTemp }, openaiKey).handle();
-
-    console.log('res', res);
-
-    props.onGenerate({
-      origin: DialogueOriginType.ChatGPT,
-      content: res.choices[0].message.content,
-      metaData: res,
-    });
+    await ask(
+      inputTemp,
+      ({ role, content, detail }) => {
+        console.log('onMessage', role, content, detail);
+        props.onGenerate({
+          id: detail.id,
+          origin: DialogueOriginType.ChatGPT,
+          content: content,
+          metaData: detail,
+        });
+      },
+      { openaiKey }
+    );
   };
 
   return (
